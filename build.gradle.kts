@@ -10,7 +10,6 @@ repositories {
 }
 
 dependencies {
-    implementation("org.springframework.security:spring-security-crypto:6.4.4")
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
 }

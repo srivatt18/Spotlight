@@ -1,8 +1,5 @@
-package src.main.java;
-
 import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 // A client side representation of a user
 class User implements Serializable {

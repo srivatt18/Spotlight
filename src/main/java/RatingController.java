@@ -1,6 +1,5 @@
-package src.main.java;
+import java.util.*;
 
-import java.util.HashMap;
 
 public class RatingController {
     private HashMap<String, Double> userRatings;
