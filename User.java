@@ -9,7 +9,11 @@ class User implements Serializable {
     Date age;
     boolean loggedIn;
 
-    public static void main(String[] args) {
-        System.out.println("hello!");
+    User(int id, String name, String email, Date age) {
+        this.id =id;
+        this.name = name;
+        this.email = email;
+        this.age = age;
+        this.loggedIn = false;
     }
 }
