@@ -16,11 +16,12 @@ class User implements Serializable {
     List<Genre> preferredGenres;
     List<Media> watchHistory;
 
-    User(int id, String name, String email, Date age) {
+    User(int id, String name, String email, String hashed_password) {
         this.id = id;
         this.name = name;
         this.email = email;
-        this.age = age;
+        this.password = hashed_password;
+        this.age = new Date();
         this.loggedIn = false;
     }
 

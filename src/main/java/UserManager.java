@@ -43,6 +43,21 @@ class UserManager {
         this.database = database;
     }
     
+    public boolean createUser(String username, String email, String password) {
+        if (validateUsername(username) && validateEmail(email) && validatePassword(password)) {
+            if (database.emailFree(email)) {
+                return false;
+            }
+            
+            User u = new User(database.getFreeID(), username, email, encoder.encode(password));
+            database.addUser(u);
+
+            return true;
+        }
+
+        return false;
+    }
+
     public boolean logIn(String email, String password) {
         String hash = database.getUserFromEmail(email).getHashedPassword();
         return encoder.matches(password, hash);
