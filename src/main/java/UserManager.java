@@ -1,3 +1,5 @@
+package src.main.java;
+
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -41,16 +43,16 @@ class UserManager {
         this.database = database;
     }
     
-    public boolean logIn(User u, String password) {
-        String hash = database.getUser(u).getHashedPassword(u);
+    public boolean logIn(String email, String password) {
+        String hash = database.getUserFromEmail(email).getHashedPassword();
         return encoder.matches(password, hash);
     }
 
     public User getUserFromID(int id) {
-        return database.getUsers().stream().filter(user -> user.id == id).collect(Collectors.toList());
+        return database.getUsers().stream().filter(user -> user.id == id).findFirst().get();
     }
 
     public List<Media> getWatchHistory(User u) {
-        return database.getUser(u).getWatchHistory();
+        return u.getWatchHistory();
     }
 }
