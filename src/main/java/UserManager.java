@@ -14,6 +14,9 @@ class UserManager {
     private static Pattern usernameRegex = Pattern.compile("^[a-z0-9_-]{3,15}$");
     private static Pattern passwordRegex = Pattern.compile("^[a-z0-9_-]{3,15}$");
 
+    public static final int MIN_LENGTH_PWD = 8;
+    public static final int MAX_LENGTH_PWD = 12;
+
     public static boolean validate(String email, String username, String password) {
         return validateEmail(email) && validateUsername(username) && validatePassword(password);
     }
@@ -42,20 +45,69 @@ class UserManager {
         encoder = new Argon2PasswordEncoder(16, 32, 2, 10 * 24, 1000);
         this.database = database;
     }
-    
-    public boolean createUser(String username, String email, String password) {
+
+    public static boolean checkPwdLength(String pwd){
+        if(MIN_LENGTH_PWD <= pwd.length()  &&  pwd.length() <= MAX_LENGTH_PWD){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public static boolean checkPwdForValidCharacters(String pwd) {
+        //returns false in the following cases :
+        //      if incoming String has one or more space or control characters
+        //      if incoming String does not have at least of the following : one letter or number or  special character
+        //return true otherwise
+        boolean foundLetter = false;
+        boolean foundNumber = false;
+        boolean foundSpecialChar = false;
+        for (char c : pwd.toCharArray()) {
+            if (Character.isISOControl(c) || Character.isSpaceChar(c)) {
+                return false;
+            } else if (Character.isLetter(c)) {
+                foundLetter = true;
+            } else if (Character.isDigit(c)) {
+                foundNumber = true;
+            } else {
+                foundSpecialChar = true;
+            }
+        }
+        //checked all characters in the incoming string
+        return( foundLetter && foundNumber && foundSpecialChar );
+    }
+
+    public static boolean checkPwd1Pwd2(String pwd1, String pwd2){
+        if( pwd1.equals(pwd2) ){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public String createUser(String username, String email, String password, String confirmPassword) {
         if (validateUsername(username) && validateEmail(email) && validatePassword(password)) {
             if (database.emailFree(email)) {
-                return false;
+                return "Email already in use";
             }
-            
+
+            if( !checkPwdLength( password ) ){
+                return "Password must be within 8-12 characters";
+            }
+            if( !checkPwdForValidCharacters( password ) ){
+                return "Password must have at least one letter, one number, and one special character with no spaces or control characters";
+            }
+            if( !checkPwd1Pwd2( password, confirmPassword ) ){
+                return "Retyped password does not match the entered password";
+            }
+
             User u = new User(database.getFreeID(), username, email, encoder.encode(password));
             database.addUser(u);
 
-            return true;
+            return "Account created successfully";
         }
 
-        return false;
+        return "Something went wrong";
     }
 
     public boolean logIn(String email, String password) {
