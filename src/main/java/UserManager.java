@@ -82,7 +82,6 @@ class UserManager {
     }
 
     public String createUser(String username, String email, String password, String confirmPassword) {
-        if (validateUsername(username) && validateEmail(email) && validatePassword(password)) {
             if (database.emailFree(email)) {
                 return "Email already in use";
             }
@@ -101,14 +100,13 @@ class UserManager {
             database.addUser(u);
 
             return "Account created successfully";
-        }
-
-        return "Something went wrong";
     }
 
-    public boolean logIn(String email, String password) {
+    public String logIn(String email, String password) {
         String hash = database.getUserFromEmail(email).getHashedPassword();
-        return encoder.matches(password, hash);
+        if( encoder.matches(password, hash))
+            return "User logged in successfully";
+        return "Login failed";
     }
 
     public User getUserFromID(int id) {
