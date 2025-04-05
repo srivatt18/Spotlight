@@ -105,6 +105,9 @@ public class UserManager {
     }
 
     public String logIn(String email, String password) {
+        if(database.getUserFromEmail(email) == null){
+            return "User not found";
+        }
         String hash = database.getUserFromEmail(email).getHashedPassword();
         if( encoder.matches(password, hash))
             return "User logged in successfully";
