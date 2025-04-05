@@ -16,6 +16,8 @@ dependencies {
 
     // Spring Security Crypto for Argon2PasswordEncoder
     implementation("org.springframework.security:spring-security-crypto:6.2.2")
+    implementation("org.bouncycastle:bcprov-jdk15on:1.70")
+    implementation("commons-logging:commons-logging:1.2")
 }
 
 tasks.test {

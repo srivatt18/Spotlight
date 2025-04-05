@@ -1,3 +1,5 @@
+package spotlight;
+
 public class Media {
     private String title;
     private Genre genre;

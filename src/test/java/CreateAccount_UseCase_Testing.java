@@ -1,6 +1,9 @@
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+import spotlight.UserManager;
+import  spotlight.DBMgr;
+
 class CreateAccount_UseCase_Testing {
     //
     private final DBMgr database = new DBMgr();
@@ -8,7 +11,7 @@ class CreateAccount_UseCase_Testing {
     @Test
     void create_TC1() {
         //all values valid
-        assertEquals( "Account created successfully", userManager.createUser("xft123%PLM", "user@gmail.com",  "xft123%PLM", "xft123%PLM")  );
+        assertEquals( "Account created successfully", userManager.createUser("xft123%PLM", "user@gmail.com",  "xft123%PLM", "xft123%PLM"));
     }
 
     @Test
@@ -33,7 +36,8 @@ class CreateAccount_UseCase_Testing {
     @Test
     void create_TC7() {
         //sending an existing user
-        assertEquals( "Email already in use", userManager.createUser("catlover", "user@gmail.com",  "xft123%PLM", "xft123%PLM")  );
+        userManager.createUser("catlover", "firstuser@gmail.com",  "xft123%PLM", "xft123%PLM");
+        assertEquals( "Email already in use", userManager.createUser("catlover", "firstuser@gmail.com",  "xft123%PLM", "xft123%PLM")  );
     }
 
 

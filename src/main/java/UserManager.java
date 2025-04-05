@@ -1,9 +1,11 @@
+package spotlight;
+
 import java.util.*;
 import java.util.regex.Pattern;
 
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 
-class UserManager {
+public class UserManager {
     // DBMgr database;
 
     private static Pattern emailRegex = Pattern.compile("^[\\w\\-\\.]+@([\\w-]+\\.)+[\\w-]{2,}$");
@@ -33,7 +35,7 @@ class UserManager {
     List<Integer> loggedIn;
     Argon2PasswordEncoder encoder;
 
-    UserManager(DBMgr database) {
+    public UserManager(DBMgr database) {
         // Salt size
         // Hash size
         // Memory size
@@ -82,7 +84,7 @@ class UserManager {
     }
 
     public String createUser(String username, String email, String password, String confirmPassword) {
-            if (database.emailFree(email)) {
+            if (!database.emailFree(email)) {
                 return "Email already in use";
             }
 

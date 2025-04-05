@@ -1,3 +1,5 @@
+package spotlight;
+
 public enum Genre {
     Horror,
     Fantasy,

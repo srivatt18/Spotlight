@@ -1,3 +1,5 @@
+package spotlight;
+
 import java.util.ArrayList;
 import java.util.List;
 
