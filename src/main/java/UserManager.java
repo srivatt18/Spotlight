@@ -105,17 +105,31 @@ public class UserManager {
     }
 
     public String logIn(String email, String password) {
-        if(database.getUserFromEmail(email) == null){
+        User u = database.getUserFromEmail(email);
+        if(u == null){
             return "User not found";
         }
-        String hash = database.getUserFromEmail(email).getHashedPassword();
-        if( encoder.matches(password, hash))
+        String hash = u.getHashedPassword();
+        if( encoder.matches(password, hash)) {
+            u.setLoggedIn(true);
             return "User logged in successfully";
+        }
         return "Login failed";
     }
 
+    public String logOut(User u) {
+       if(u.isLoggedIn()){
+           u.setLoggedIn(false);
+           return "User logged out successfully";
+       }
+       return "user not logged in";
+    }
     public User getUserFromID(int id) {
         return database.getUsers().stream().filter(user -> user.id == id).findFirst().get();
+    }
+
+    public String logOut(String email){
+        return logOut(database.getUserFromEmail(email));
     }
 
     public List<Media> getWatchHistory(User u) {
