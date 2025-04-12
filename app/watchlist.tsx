@@ -1,9 +1,9 @@
 import { View, Text } from "react-native";
 
-export default function Login() {
+export default function Watchlist() {
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text>Login Screen</Text>
+      <Text>Watchlist Screen</Text>
     </View>
   );
 }
