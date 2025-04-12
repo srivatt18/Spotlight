@@ -1,43 +1,4 @@
-/*
-import { Text, View } from "react-native";
 
-export default function Index() {
-  return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Text>Edit app/index.tsx to edit this screen.</Text>
-    </View>
-  );
-}
-
-
-import React from "react";
-import { registerRootComponent } from "expo";
-import { useFonts } from "expo-font";
-import { Text } from "react-native";
-import { WelcomeScreen } from "./homepage";
-
-const App = () => {
-  const [fontsLoaded] = useFonts({
-    "Monomaniac One": require("../assets/fonts/MonomaniacOne-Regular.ttf"),
-    "PlusJakartaSans": require("../assets/fonts/PlusJakartaSans-VariableFont_wght.ttf"),
-    "SpaceMono-Regular": require("../assets/fonts/SpaceMono-Regular.ttf"),
-  });
-
-  if (!fontsLoaded) {
-    return <Text>Loading fonts...</Text>;
-  }
-
-  return <WelcomeScreen />;
-};
-
-registerRootComponent(App);
-*/
 import React from "react";
 import {
   View,
@@ -189,5 +150,4 @@ const styles = StyleSheet.create({
   },
 });
 export default WelcomeScreen;
-
 
