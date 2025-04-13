@@ -7,6 +7,7 @@ config.transformer.babelTransformerPath = require.resolve('react-native-svg-tran
 
 config.resolver.assetExts = config.resolver.assetExts.filter(ext => ext !== 'svg');
 config.resolver.sourceExts.push('svg');
+config.resolver.unstable_enablePackageExports = true;
 
 module.exports = config;
 
