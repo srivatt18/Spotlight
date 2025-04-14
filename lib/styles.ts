@@ -1,17 +1,26 @@
 import { StyleSheet, useWindowDimensions } from "react-native";
 
 const { width, height } = useWindowDimensions();
+export const isPortrait = width < height;
 export const isSmallScreen = width < 400;
 
-function scale(size: number) {
+export function scale(size: number) {
+    return (size * (isPortrait ? height : width)) / 375;
+}
+
+export function scaleHoz(size: number) {
     return (size * width) / 375;
+}
+
+export function scaleVert(size: number) {
+    return (size * height) / 375;
 }
 
 export const text = StyleSheet.create({
     text: {
         color: "#fff",
         fontFamily: "Monomaniac One",
-        fontSize: 28,
+        fontSize: scale(6),
     },
 
     light: {
@@ -43,7 +52,6 @@ export const theme = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: "#000",
-        padding: 18,
         minHeight: "100%",
     },
 
@@ -60,8 +68,15 @@ export const theme = StyleSheet.create({
     },
 
     textInput: {
-        flex: 1,
-        justifyContent: "center",
+        color: "#fff",
+        fontFamily: "Monomaniac One",
+        fontSize: text.md.fontSize,
+
+        padding: 4,
+        backgroundColor: "#111",
+
+        // flex: 1,
+        // justifyContent: "center",
         alignItems: "center"
     },
 
