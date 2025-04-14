@@ -19,7 +19,7 @@ export default function WelcomeScreen() {
     <ScrollView style={{backgroundColor: "#000"}} contentContainerStyle={theme.container}>
 
       <NavBar></NavBar>
-      <Text style={[theme.text, text.xxl, { marginTop: "10%"}]}>Welcome to Spotlight!</Text>
+      <Text style={[theme.text, text.xxl]}>Welcome to Spotlight!</Text>
       <Text style={[theme.text, text.xl, text.light]}>
         Our mission is to help you find shows and movies you will love!
       </Text>

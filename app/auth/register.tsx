@@ -3,6 +3,7 @@ import { View, TextInput, Pressable, StyleSheet, Text } from 'react-native';
 
 import { signUp } from "lib/auth-client"
 import { z } from 'zod'
+import { scaleVert, theme } from 'lib/styles';
 
 const registerSchema = z.object({
   username: z.string().min(3, { message: "Username must be 3 or more characters" }).refine((name) => !name.includes(' '), { message: 'Usernames must not contain spaces' }),
@@ -47,32 +48,32 @@ export default function Register() {
   }
 
   return (
-    <View style={styles.container}>
-      <Text>Sign-up Screen</Text>
+    <View style={[theme.container, {gap: scaleVert(4)}]}>
+      <Text style={theme.text}>Sign-up for Spotlight!</Text>
+      <Text style={[theme.text, { fontSize: 12, color: "#cf4747"}]}>{invalid ? invalid : ""}</Text>
       <TextInput
-        style={styles.input}
+        style={theme.textInput}
         placeholder="Email"
         keyboardType="email-address"
         value={email}
         onChangeText={setEmail}
       />
-      <Text>{invalid ? invalid : ""}</Text>
       <TextInput
-        style={styles.input}
+        style={theme.textInput}
         placeholder="Username"
         keyboardType="email-address"
         value={username}
         onChangeText={setUsername}
       />
       <TextInput
-        style={styles.input}
+        style={theme.textInput}
         placeholder="Password"
         keyboardType="email-address"
         value={password}
         onChangeText={setPassword}
       />
       <Pressable onPress={onSubmit}>
-        <Text>Register!</Text>
+        <Text style={theme.button}>Register!</Text>
       </Pressable>
     </View>
   );
