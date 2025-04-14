@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, TextInput, Pressable, StyleSheet, Text } from 'react-native';
 
-import { signUp } from '../../lib/auth-client'
+import { signUp } from "lib/auth-client"
 import { z } from 'zod'
 
 const registerSchema = z.object({
@@ -77,21 +77,4 @@ export default function Register() {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  input: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center"
-  },
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center"
-  },
-  text: {
-    fontSize: 20,
-    color: 'black',
-  },
-});
 
