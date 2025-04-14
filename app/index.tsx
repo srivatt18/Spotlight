@@ -1,193 +1,41 @@
-/*
-import { Text, View } from "react-native";
 
-export default function Index() {
-  return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Text>Edit app/index.tsx to edit this screen.</Text>
-    </View>
-  );
-}
-
-
-import React from "react";
-import { registerRootComponent } from "expo";
-import { useFonts } from "expo-font";
-import { Text } from "react-native";
-import { WelcomeScreen } from "./homepage";
-
-const App = () => {
-  const [fontsLoaded] = useFonts({
-    "Monomaniac One": require("../assets/fonts/MonomaniacOne-Regular.ttf"),
-    "PlusJakartaSans": require("../assets/fonts/PlusJakartaSans-VariableFont_wght.ttf"),
-    "SpaceMono-Regular": require("../assets/fonts/SpaceMono-Regular.ttf"),
-  });
-
-  if (!fontsLoaded) {
-    return <Text>Loading fonts...</Text>;
-  }
-
-  return <WelcomeScreen />;
-};
-
-registerRootComponent(App);
-*/
 import React from "react";
 import {
   View,
   Text,
   StyleSheet,
-  TouchableOpacity,
-  Dimensions,
-  ScrollView, Image
+  TouchableOpacity, ScrollView, useWindowDimensions
 } from "react-native";
+
 import { useRouter } from 'expo-router';
-import Logo from '../assets/images/logo';
-import { useWindowDimensions } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import { logoGradient } from '../assets/constants/gradient'; 
 
+import NavBar from 'lib/components/navbar'
+import { theme, text } from 'lib/styles';
 
-
-//const { width } = Dimensions.get("window");
-const { width } = useWindowDimensions();
-const isSmallScreen = width < 400;
 const router = useRouter();
 
-
-
-export const WelcomeScreen = () => {
+export default function WelcomeScreen() {
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <View style={[styles.navBarContainer,
-    isSmallScreen && { flexDirection: 'column', alignItems: 'center', gap: 12 }]}>
-      <Logo size={100} />
-      <View style={styles.navBar}>
-        {([
-            { label: "Home", route: "/homepage" },
-            { label: "Watchlists", route: "/watchlist" },
-            { label: "Recommendations", route: "/recommendation" },
-            { label: "Profile", route: "/profile" },
-          ]as const).map(({ label, route }) => (
-            <TouchableOpacity key={label} onPress={() => router.push(route)}>
-              <Text style={styles.navItem}>{label}</Text>
-            </TouchableOpacity>
-        ))}
-      </View>
-      </View>
+    <ScrollView style={{backgroundColor: "#000"}} contentContainerStyle={theme.container}>
 
-      <Text style={styles.welcome}>Welcome to Spotlight!</Text>
-      <Text style={styles.mission}>
+      <NavBar></NavBar>
+      <Text style={[theme.text, text.xxl, { marginTop: "10%"}]}>Welcome to Spotlight!</Text>
+      <Text style={[theme.text, text.xl, text.light]}>
         Our mission is to help you find shows and movies you will love!
       </Text>
 
-      <View style={styles.accountOptions}>
-        <Text style={styles.label}>New to Spotlight?</Text>
-        <TouchableOpacity style={styles.button} onPress={() => router.push('/auth/register')}>
-            <Text style={styles.buttonText}>Sign Up</Text>
+      <View style={{ justifyContent: "center", alignItems: "center", marginTop: 40, gap: 20 }}>
+        <Text style={[theme.text, text.lg]}>New to Spotlight?</Text>
+
+        <TouchableOpacity onPress={() => router.push('/auth/register')}>
+          <Text style={theme.button}>Sign Up</Text>
         </TouchableOpacity>
 
-        <Text style={styles.label}>Have a Spotlight account?</Text>
-        <TouchableOpacity style={styles.button} onPress={() => router.push('/auth/login')}>
-            <Text style={styles.buttonText}>Login</Text>
+        <Text style={[theme.text, text.lg]}>Have a Spotlight account?</Text>
+        <TouchableOpacity onPress={() => router.push('/auth/login')}>
+          <Text style={theme.button}>Login</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
   );
 };
-
-const scaleFont = (size: number) => (size * width) / 375;
-
-const styles = StyleSheet.create({
-  container: {
-    alignItems: "center",
-    backgroundColor: "#000",
-    padding: 18,
-    minHeight: "100%",
-  },
-  ellipse1: {
-    position: "absolute",
-    top: -50,
-    left: -50,
-  },
-  welcome: {
-    fontSize: scaleFont(28),
-    color: "#fff",
-    fontFamily: "Monomaniac One",
-    marginTop: 10,
-    textAlign: "center",
-  },
-  mission: {
-    fontSize: scaleFont(16),
-    color: "#ccc",
-    fontFamily: "PlusJakartaSans",
-    textAlign: "center",
-    marginTop: 10,
-    marginBottom: 30,
-  },
-  label: {
-    fontSize: scaleFont(14),
-    color: "#fff",
-    fontFamily: "Monomaniac One",
-    marginBottom: 8,
-  },
-  accountOptions: {
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 40,
-    gap: 10,
-    width: "100%",
-  },
-  button: {
-    backgroundColor: "#cf4747",
-    paddingVertical: 10,
-    paddingHorizontal: 30,
-    borderRadius: 20,
-    marginBottom: 20,
-  },
-  buttonText: {
-    color: "#fff",
-    fontFamily: "PlusJakartaSans",
-    fontSize: 16,
-  },
-  navBar: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    //alignItems: "center",
-    borderColor: "#cf4747",
-    borderWidth: 2,
-    borderRadius: 20,
-    width: "100%",
-    padding: 12,
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    flex: 1,
-    marginLeft: 12,
-    marginBottom: 30,
-  },
-  navItem: {
-    color: "#fff",
-    fontFamily: "PlusJakartaSans",
-    fontSize: 28,
-    marginHorizontal: 8
-  },
-
-  navBarContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    width: '100%',
-    paddingHorizontal: 20,
-    paddingTop: 40,
-    marginBottom: 30,
-  },
-});
-export default WelcomeScreen;
-
-
