@@ -1,0 +1,2 @@
+-- Create the "media" table in SQL
+CREATE TABLE media (uuid TEXT, title TEXT, age_restriction TEXT, genre TEXT, lang TEXT, rating_sum INTEGER, rating_count INTEGER, recent_views INTEGER, media_type INTEGER);
