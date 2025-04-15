@@ -28,18 +28,26 @@ export const text = StyleSheet.create({
     },
 
     md: {
+        color: "#fff",
+        fontFamily: "Monomaniac One",
         fontSize: scale(6),
     },
 
     lg: {
+        color: "#fff",
+        fontFamily: "Monomaniac One",
         fontSize: scale(8),
     },
 
     xl: {
+        color: "#fff",
+        fontFamily: "Monomaniac One",
         fontSize: scale(10),
     },
 
     xxl: {
+        color: "#fff",
+        fontFamily: "Monomaniac One",
         fontSize: scale(12),
     },
 
