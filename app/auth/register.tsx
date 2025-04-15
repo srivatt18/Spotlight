@@ -2,14 +2,8 @@ import React, { useState } from 'react';
 import { View, TextInput, Pressable, StyleSheet, Text } from 'react-native';
 
 import { signUp } from "lib/auth-client"
-import { z } from 'zod'
 import { scaleVert, theme } from 'lib/styles';
-
-const registerSchema = z.object({
-  username: z.string().min(3, { message: "Username must be 3 or more characters" }).refine((name) => !name.includes(' '), { message: 'Usernames must not contain spaces' }),
-  email: z.string().email({ message: 'Invalid email address' }),
-  password: z.string().min(8, { message: 'Password must 8 characters or longer' }).max(25, { message: 'Password must shorter than 26 characters' }),
-});
+import { registerSchema } from 'lib/validate';
 
 export default function Register() {
   const [username, setUsername] = useState('');
