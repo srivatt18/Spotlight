@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, TextInput, Pressable, StyleSheet, Text } from 'react-native';
 
 import { signIn } from "lib/auth-client"
+import { scaleVert, theme } from 'lib/styles';
 
 export default function Login() {
   const [username, setUsername] = useState('');
@@ -24,51 +25,34 @@ export default function Login() {
   }
 
   return (
-    <View style={styles.container}>
-      <Text>Sign-up Screen</Text>
+    <View style={[theme.container, {gap: scaleVert(4)}]}>
+      <Text style={theme.text}>Sign-up Screen</Text>
+      
       <TextInput
-        style={styles.input}
+        style={theme.textInput}
         placeholder="Email"
         keyboardType="email-address"
         value={email}
         onChangeText={setEmail}
       />
-      <Text>{invalid ? invalid : ""}</Text>
+
       <TextInput
-        style={styles.input}
+        style={theme.textInput}
         placeholder="Username"
         keyboardType="email-address"
         value={username}
         onChangeText={setUsername}
       />
       <TextInput
-        style={styles.input}
+        style={theme.textInput}
         placeholder="Password"
         keyboardType="email-address"
         value={password}
         onChangeText={setPassword}
       />
       <Pressable onPress={onSubmit}>
-        <Text>Register!</Text>
+        <Text style={theme.button}>Register!</Text>
       </Pressable>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  input: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center"
-  },
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center"
-  },
-  text: {
-    fontSize: 20,
-    color: 'black',
-  },
-});
-

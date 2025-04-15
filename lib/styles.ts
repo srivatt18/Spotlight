@@ -66,7 +66,7 @@ export const theme = StyleSheet.create({
     button: {
         color: "#fff",
         fontFamily: "Monomaniac One",
-        fontSize: text.md.fontSize,
+        fontSize: text.text.fontSize,
 
         backgroundColor: "#cf4747",
         paddingVertical: 10,
