@@ -2,7 +2,7 @@ import { TouchableOpacity, useWindowDimensions, View, Text, StyleSheet } from "r
 import { isPortrait, isSmallScreen, scale, theme } from "../styles";
 import { router } from "expo-router";
 
-import Logo from "assets/images/logo";
+import Logo from "@/assets/images/logo";
 
 export default function NavBar() {
 
@@ -29,14 +29,11 @@ const styles = StyleSheet.create({
         alignItems: "center",
         //alignItems: "center",
         borderColor: "#cf4747",
+        backgroundColor: "#000",
         borderBottomWidth: 1,
 
         width: "100%",
-        flex: 1,
-        flexGrow: 0,
         padding: 12,
         paddingHorizontal: 16,
-        position: "fixed",
-        top: 0,
     },
 });

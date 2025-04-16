@@ -7,85 +7,55 @@ import {
   Dimensions,
   TouchableOpacity
 } from 'react-native';
-import NavBar from '../lib/components/navbar';
-import MediaTile from '../lib/components/media_tile';
-import { theme, text } from '../lib/styles';
+import MediaTile from '@/lib/components/media_tile';
+import { theme, text, scale, scaleHoz, scaleVert } from '../lib/styles';
 
-const screenWidth = Dimensions.get('window').width;
-const tileSize = screenWidth / 15;
-
-const RecommendationPage = () => {
+export default function RecommendationPage() {
   return (
-    <View style={styles.container}>
-      <NavBar />
-      <ScrollView contentContainerStyle={styles.content}>
-        {/* Movies*/}
+    <ScrollView contentContainerStyle={[theme.container, { gap: scaleVert(10) }]}>
+      {/* Movies*/}
+      <View>
         <Text style={[text.xl, { marginBottom: 20 }]}>Movies:</Text>
 
         {/* Media Tiles */}
         <View style={styles.tileGrid}>
           {Array.from({ length: 6 }).map((_, index) => (
-            <View key={index} style={styles.tileWrapper}>
-              <MediaTile size={tileSize} />
+            <View key={index}>
+              <MediaTile size={scaleHoz(35)} />
             </View>
           ))}
         </View>
-        
-        {/* Shows*/}
+      </View>
+
+
+      {/* Shows*/}
+      <View>
         <Text style={[text.xl, { marginBottom: 20 }]}>Shows:</Text>
 
         {/* Media Tiles */}
         <View style={styles.tileGrid}>
           {Array.from({ length: 6 }).map((_, index) => (
-            <View key={index} style={styles.tileWrapper}>
-              <MediaTile size={tileSize} />
+            <View key={index}>
+              <MediaTile size={scaleHoz(35)} />
             </View>
           ))}
         </View>
-      </ScrollView>
-      <TouchableOpacity style={styles.floatingButton}>
-        <Text style={styles.buttonText}>Generate More Recommendations</Text>
+      </View>
+
+      <TouchableOpacity>
+        <Text style={theme.button}>Generate More Recommendations</Text>
       </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#000000',
-  },
-  content: {
-    padding: 16,
-    marginTop: 120,
-    alignItems: 'flex-start',
-  },
   tileGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
     gap: 16,
+    paddingHorizontal: scaleHoz(15),
     width: '100%',
   },
-  tileWrapper: {
-    position: 'relative',
-    marginBottom: 16,
-  },
-  floatingButton: {
-    position: 'absolute',
-    bottom: 30,
-    alignSelf: 'center',
-    backgroundColor: '#cf4747',
-    paddingVertical: 12,
-    paddingHorizontal: 40,
-    borderRadius: 24,
-    zIndex: 10,
-  },
-  buttonText: {
-    color: '#fff',
-    fontFamily: 'Monomaniac One',
-    fontSize: 18,
-  },
 });
-
-export default RecommendationPage;

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { View, TextInput, Pressable, StyleSheet, Text } from 'react-native';
 
-import { signUp } from "lib/auth-client"
-import { scaleVert, theme } from 'lib/styles';
-import { registerSchema } from 'lib/validate';
+import { signUp } from "@/lib/auth-client"
+import { scaleVert, theme } from '@/lib/styles';
+import { registerSchema } from '@/lib/validate';
 
 export default function Register() {
   const [username, setUsername] = useState('');

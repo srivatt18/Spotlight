@@ -8,8 +8,7 @@ import {
 
 import { useRouter } from 'expo-router';
 
-import NavBar from 'lib/components/navbar'
-import { theme, text } from 'lib/styles';
+import { theme, text } from '@/lib/styles';
 
 const router = useRouter();
 
@@ -17,7 +16,7 @@ export default function WatchlistPage() {
   return (
     <ScrollView style={{backgroundColor: "#000"}} contentContainerStyle={theme.container}>
 
-      <NavBar></NavBar>
+
 
       <View style={{ justifyContent: "center", alignItems: "center", marginTop: 40, gap: 20 }}>
         <Text style={[theme.text, text.lg]}>New Watchlist</Text>
@@ -27,7 +26,7 @@ export default function WatchlistPage() {
         </TouchableOpacity>
 
         <Text style={[theme.text, text.lg]}>View/Edit Watchlist</Text>
-        <TouchableOpacity onPress={() => router.push('/auth/login')}> //change this later
+        <TouchableOpacity onPress={() => router.push('/auth/login')}>
           <Text style={theme.button}>View</Text>
         </TouchableOpacity>
       </View>

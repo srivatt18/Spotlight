@@ -1,12 +1,17 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors"
 import { serve } from '@hono/node-server'
-import { auth } from "lib/auth"; // path to your auth file
+import { auth } from "@/lib/auth"; // path to your auth file
 // import { web_serve } from "./web_serve.ts";
 import { add_media, get_media, del_media } from "./api";
 import { addMediaSchema } from "@/lib/validate";
 
-const app = new Hono();
+type Variables = {
+    session: typeof auth.$Infer.Session.session | null,
+    user: typeof auth.$Infer.Session.user | null
+}
+
+const app = new Hono<{ Variables: Variables }>()
 
 console.log(auth.options)
 
@@ -28,23 +33,28 @@ app.use(
 
 app.use("*", async (c, next) => {
     console.log("auth middleware running!");
-	const session = await auth.api.getSession({ headers: c.req.raw.headers });
- 
-  	if (!session) {
-    	c.set("user", null);
-    	c.set("session", null);
-    	return next();
-  	}
- 
-  	c.set("user", session.user);
-  	c.set("session", session.session);
-  	return next();
+    const session = await auth.api.getSession({ headers: c.req.raw.headers });
+
+    if (!session) {
+        c.set("user", null);
+        c.set("session", null);
+        return next();
+    }
+
+    c.set("user", session.user);
+    c.set("session", session.session);
+    return next();
 });
 
 app.on(["POST", "GET"], "/api/auth/**", (c) => auth.handler(c.req.raw)); // Forward all auth requests to better-auth
 
 app.post("/api/media", async (c) => {
-    
+    console.log("Adding media, checking authorization");
+    let user = c.get("session");
+    if (c.get("user") == null) {
+        return c.status(403);
+    }
+
     const data = await c.req.json();
 
     let parse = addMediaSchema.safeParse(data);

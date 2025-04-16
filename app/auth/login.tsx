@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { View, TextInput, Pressable, StyleSheet, Text } from 'react-native';
 
-import { signIn } from "lib/auth-client"
-import { scaleVert, theme } from 'lib/styles';
+import { signIn } from "@/lib/auth-client"
+import { scaleVert, theme } from '@/lib/styles';
 
 export default function Login() {
-  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -26,7 +25,7 @@ export default function Login() {
 
   return (
     <View style={[theme.container, {gap: scaleVert(4)}]}>
-      <Text style={theme.text}>Sign-up Screen</Text>
+      <Text style={theme.text}>Sign In!</Text>
       
       <TextInput
         style={theme.textInput}
@@ -38,20 +37,13 @@ export default function Login() {
 
       <TextInput
         style={theme.textInput}
-        placeholder="Username"
-        keyboardType="email-address"
-        value={username}
-        onChangeText={setUsername}
-      />
-      <TextInput
-        style={theme.textInput}
         placeholder="Password"
         keyboardType="email-address"
         value={password}
         onChangeText={setPassword}
       />
       <Pressable onPress={onSubmit}>
-        <Text style={theme.button}>Register!</Text>
+        <Text style={theme.button}>Sign In!</Text>
       </Pressable>
     </View>
   );

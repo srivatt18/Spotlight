@@ -9,8 +9,7 @@ import {
 
 import { useRouter } from 'expo-router';
 
-import NavBar from 'lib/components/navbar'
-import { theme, text } from 'lib/styles';
+import { theme, text } from '@/lib/styles';
 
 const router = useRouter();
 
@@ -18,7 +17,6 @@ export default function WelcomeScreen() {
   return (
     <ScrollView style={{backgroundColor: "#000"}} contentContainerStyle={theme.container}>
 
-      <NavBar></NavBar>
       <Text style={[theme.text, text.xxl]}>Welcome to Spotlight!</Text>
       <Text style={[theme.text, text.xl, text.light]}>
         Our mission is to help you find shows and movies you will love!
