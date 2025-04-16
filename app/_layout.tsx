@@ -1,6 +1,7 @@
 import { Slot } from "expo-router";
 import { useFonts } from "expo-font";
 import { Text } from "react-native";
+import NavBar from "@/lib/components/navbar";
 
 export default function Layout() {
   const [fontsLoaded] = useFonts({
@@ -13,5 +14,10 @@ export default function Layout() {
     return <Text style={{ color: "#fff", textAlign: "center", marginTop: 50 }}>Loading fonts...</Text>;
   }
 
-  return <Slot />;
+  return (
+    <>
+      <NavBar></NavBar>
+      <Slot />
+    </>
+  );
 }

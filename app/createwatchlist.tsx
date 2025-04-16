@@ -10,7 +10,6 @@ import {
   TouchableOpacity
 } from 'react-native';
 import { router } from "expo-router";
-import NavBar from '../lib/components/navbar';
 import MediaTile from '../lib/components/media_tile';
 import PlusIcon from '../assets/images/plus.png';
 import SearchIcon from '../assets/images/search.png';
@@ -22,7 +21,6 @@ const tileSize = screenWidth / 15;
 const CreateWatchlist = () => {
   return (
     <View style={styles.container}>
-      <NavBar />
       <ScrollView contentContainerStyle={styles.content}>
         {/* Watchlist Name */}
         <Text style={[text.xl, { marginBottom: 20 }]}>Watchlist name:</Text>

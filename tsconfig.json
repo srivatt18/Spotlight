@@ -2,12 +2,14 @@
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
     "strict": true,
-    "baseUrl": ".",
     "paths": {
       "@/*": [
         "./*"
       ]
     }
+  },
+  "ts-node": {
+    "require": ["tsconfig-paths/register"]
   },
   "include": [
     "**/*.ts",

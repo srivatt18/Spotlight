@@ -1,4 +1,4 @@
-import { db } from 'backend/db';
+import { db } from '@/backend/db';
 import { v4 as uuid } from 'uuid';
 
 export async function add_media(title: string, age_rating: string, genre: string, lang: string, is_movie: boolean) {

@@ -1,11 +1,15 @@
 import { StyleSheet, useWindowDimensions } from "react-native";
 
-const { width, height } = useWindowDimensions();
+export const { width, height } = useWindowDimensions();
 export const isPortrait = width < height;
 export const isSmallScreen = width < 400;
 
 export function scale(size: number) {
     return (size * (isPortrait ? height : width)) / 375;
+}
+
+export function scaleMin(size: number) {
+    return (size * (isPortrait ? width : height)) / 375;
 }
 
 export function scaleHoz(size: number) {
@@ -57,6 +61,7 @@ export const theme = StyleSheet.create({
     container: {
         flex: 1,
         flexGrow: 1,
+        padding: scaleMin(15),
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: "#000",
