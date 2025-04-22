@@ -8,6 +8,18 @@ export const auth = betterAuth({
     emailAndPassword: {  
         enabled: true
     },
+    
+    user: {
+        additionalFields: {
+            watchHistory: {
+                type: "string[]"
+            },
+            
+            lang: {
+                type: "string"
+            }
+        }
+    },
 
     plugins: [ admin()]
 })

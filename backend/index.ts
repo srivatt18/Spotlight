@@ -3,8 +3,8 @@ import { cors } from "hono/cors"
 import { serve } from '@hono/node-server'
 import { auth } from "@/lib/auth"; // path to your auth file
 // import { web_serve } from "./web_serve.ts";
-import { add_media, get_media, del_media } from "./api";
-import { addMediaSchema } from "@/lib/validate";
+import { add_media, get_media, del_media, add_watchlist, get_watchlist } from "./api";
+import { addMediaSchema, addWatchlistSchema } from "@/lib/validate";
 
 type Variables = {
     session: typeof auth.$Infer.Session.session | null,
@@ -31,7 +31,7 @@ app.use(
     }),
 );
 
-app.use("*", async (c, next) => {
+app.use("/api/**", async (c, next) => {
     console.log("auth middleware running!");
     const session = await auth.api.getSession({ headers: c.req.raw.headers });
 
@@ -48,10 +48,39 @@ app.use("*", async (c, next) => {
 
 app.on(["POST", "GET"], "/api/auth/**", (c) => auth.handler(c.req.raw)); // Forward all auth requests to better-auth
 
+app.post("/api/watchlist", async (c) => {
+    let user = c.get("user");
+    if (user == null) {
+        return c.status(401);
+    }
+
+    const data = await c.req.json();
+    let parse = addWatchlistSchema.safeParse(data);
+
+    if (!parse.success){
+        return c.json({ error: parse.error.message }, 400);
+    }
+
+    const { title, isPublic } = parse.data;
+
+    add_watchlist(user, title, isPublic)
+})
+
+app.get("/api/watchlist/:uuid", async (c) => {
+    let user = c.get("user");
+    if (user == null) {
+        return c.status(401);
+    }
+
+    let results = await get_watchlist(user, c.req.param("uuid"))
+    if (!results.public && results.user != user.id) {
+        return c.status(401)
+    } return 
+})
+
 app.post("/api/media", async (c) => {
-    console.log("Adding media, checking authorization");
-    let user = c.get("session");
-    if (c.get("user") == null) {
+    let user = c.get("user");
+    if (user == null || user.role != "admin") {
         return c.status(403);
     }
 
@@ -70,7 +99,6 @@ app.post("/api/media", async (c) => {
     return c.json({ message: "Media added successfully" }, 201);
 
 });
-
 app.get("/api/media/:uuid", (c) => c.json(get_media(c.req.param('uuid'))));
 app.delete("/api/media/:uuid", (c) => c.json(del_media(c.req.param('uuid'))))
 

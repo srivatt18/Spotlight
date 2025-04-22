@@ -1,4 +1,3 @@
-
 import { Text, View } from "react-native";
 import { useSession } from "@/lib/auth-client"
 import { theme } from "@/lib/styles";

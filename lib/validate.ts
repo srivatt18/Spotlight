@@ -6,6 +6,10 @@ export const registerSchema = z.object({
   password: z.string().min(8, { message: 'Password must 8 characters or longer' }).max(25, { message: 'Password must shorter than 26 characters' }),
 });
 
+export const addWatchlistSchema = z.object({
+  title: z.string().min(1, { message: "Title must be 1 or more characters" }),
+  isPublic: z.boolean()
+});
 
 export const addMediaSchema = z.object({
     title: z.string().min(1, { message: "Title must be 1 or more characters" }),
