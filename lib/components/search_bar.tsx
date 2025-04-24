@@ -1,7 +1,7 @@
 // components/SearchBar.tsx
 import React, { useState } from 'react';
 import { View, TextInput, FlatList, Text, Pressable, StyleSheet} from 'react-native';
-import media from '@/backend/imdb_movies.json'; 
+import media from '@/assets/movies'; 
 import { theme, text } from '../styles';
 
 type mediatitle = {
@@ -18,7 +18,7 @@ export default function SearchBar({ onSelect }: Props) {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<mediatitle[]>([]);
 
-  const handleSearch = (text: string) => {
+  function handleSearch(text: string) {
     setQuery(text);
     if (text.trim() === '') {
       setResults([]);

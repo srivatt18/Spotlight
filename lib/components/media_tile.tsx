@@ -1,5 +1,5 @@
-import React from 'react';
-import { Image, View, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { Image, View, StyleSheet, Text } from 'react-native';
 import Rectangle from '../../assets/images/Rectangle.png';
 import PlayButton from '../../assets/images/PlayButton.png';
 import Description from '../../assets/images/Description.png';
@@ -12,7 +12,7 @@ interface MediaTileProps {
 
 
 async function searchMovie(title: string) {
-  let endpoint = "https://themoviedb.org/3/search/movie?";
+  let endpoint = "https://api.themoviedb.org/3/search/movie?";
   let url = endpoint + new URLSearchParams({ query: title, include_adult: "false", language: "en-US", page: "1" }).toString()
 
   const options = {
@@ -25,30 +25,32 @@ async function searchMovie(title: string) {
 
   let movie = await fetch(url, options)
     .then(res => res.json())
-    .then(json => console.log(json))
-    .catch(err => console.error(err));
   
-
-
-  alert(movie.results[0].poster_path);
-  
-  return movie.results[0].poster_path;
-  
-
-
+  return "https://image.tmdb.org/t/p/w500/" + movie.results[0].poster_path;
 }
 
 const MediaTile: React.FC<MediaTileProps> = ({ size = 100, title }) => {
+  const [posterUri, setPosterUri] = useState<string>("");
+
+  searchMovie(title).then((res)=>setPosterUri(res))
   return (
     <View style={styles.container}>
       <View style={{ width: size, height: size, justifyContent: 'center', alignItems: 'center' }}>
-        <Image
-          source = {searchMovie(title)}
-          style={{ width: size, height: size }}
-          resizeMode="contain"
-        />
+      
+      {posterUri
+          ? <Image
+              source={{ uri: posterUri }}
+              style={{ width: size, height: size }}
+              resizeMode="contain"
+            />
+          : <Image
+              source={Rectangle}  // placeholder
+              style={{ width: size, height: size }}
+              resizeMode="contain"
+            />
+        }
       </View>
-
+      <Text>{title}</Text>
     </View>
   );
 };

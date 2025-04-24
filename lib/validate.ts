@@ -1,5 +1,21 @@
 import { z } from 'zod';
 
+export const mediaSchema = z.object({
+    names: z.string(),
+    date_x: z.string().nullable(),
+    genre: z.string().nullable(),
+    overview: z.string().nullable(),
+    crew: z.string().nullable(),
+    orig_title: z.string().nullable(),
+    status: z.string().nullable(),
+    orig_lang: z.string().nullable(),
+    budget_x: z.number().nullable(),
+    revenue: z.number().nullable(),
+    country: z.string().nullable(),
+});
+
+export const jsonDbSchema = z.array(mediaSchema);
+
 export const registerSchema = z.object({
   username: z.string().min(3, { message: "Username must be 3 or more characters" }).refine((name) => !name.includes(' '), { message: 'Usernames must not contain spaces' }),
   email: z.string().email({ message: 'Invalid email address' }),

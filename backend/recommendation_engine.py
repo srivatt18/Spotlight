@@ -13,7 +13,7 @@ import warnings
 warnings.filterwarnings("ignore")
 
 # Step 2: Load your CSV from Google Drive
-csv_path = "./imdb_movies.json"  # Update path
+csv_path = "../assets/imdb_movies.json"  # Update path
 df = pd.read_json(csv_path).dropna(subset=['overview'])
 
 # Step 4: Compute TF-IDF matrix and cosine similarity

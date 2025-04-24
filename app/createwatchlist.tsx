@@ -45,10 +45,11 @@ const CreateWatchlist = () => {
         </View>
 
         {/* Media Tiles */}
+        <MediaTile title="Despicable Me" size={tileSize} />
         <View style={styles.tileGrid}>
           {Array.from({ length: 6 }).map((_, index) => (
             <View key={index} style={styles.tileWrapper}>
-              <MediaTile title="frozen" size={tileSize} />
+              <MediaTile title="Frozen II" size={tileSize} />
 
               <Image source={PlusIcon} style={styles.plusIcon} />
             </View>
