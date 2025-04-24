@@ -48,7 +48,8 @@ const CreateWatchlist = () => {
         <View style={styles.tileGrid}>
           {Array.from({ length: 6 }).map((_, index) => (
             <View key={index} style={styles.tileWrapper}>
-              <MediaTile size={tileSize} />
+              <MediaTile title="frozen" size={tileSize} />
+
               <Image source={PlusIcon} style={styles.plusIcon} />
             </View>
           ))}
