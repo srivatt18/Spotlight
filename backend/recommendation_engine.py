@@ -1,6 +1,11 @@
+# Test with (windows)
+# curl -v http://localhost:5000/recommend -H "Content-Type: application/json" -d "{\"ratings\":[{\"movie\":\"Interstellar\",\"rating\":50},{\"movie\":\"Frozen II\",\"rating\":100}]}"
+
 import numpy as np
 import pandas as pd
 from flask import Flask, request, jsonify
+from flask_cors import CORS
+
 import random
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
@@ -8,8 +13,8 @@ import warnings
 warnings.filterwarnings("ignore")
 
 # Step 2: Load your CSV from Google Drive
-csv_path = "./imdb_movies.csv"  # Update path
-df = pd.read_csv(csv_path).dropna(subset=['overview'])
+csv_path = "./imdb_movies.json"  # Update path
+df = pd.read_json(csv_path).dropna(subset=['overview'])
 
 # Step 4: Compute TF-IDF matrix and cosine similarity
 tfidf = TfidfVectorizer(stop_words='english')
@@ -66,14 +71,17 @@ def get_personalized_recommendations(user_ratings: dict, top_n=5):
     return unique_recommendations
 
 app = Flask(__name__)
+CORS(app)
 
 # API route for recommendations
-@app.route('/recommend', methods=['POST'])
+@app.route('/', methods=['POST'])
 def get_recommendations():
+    print(request)
     data = request.get_json()
     user_ratings = data.get("ratings", {})
     ratings_map = {entry["movie"]: entry["rating"] for entry in user_ratings}
-    return jsonify({"recommendations": get_personalized_recommendations(ratings_map)})
+    recommendations =  get_personalized_recommendations(ratings_map)
+    return jsonify({"recommendations": recommendations, "length": len(recommendations)})
 
 if __name__ == "__main__":
     app.run(debug=False, port=5000)

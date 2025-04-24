@@ -1,10 +1,21 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors"
+import { proxy } from "hono/proxy"
 import { serve } from '@hono/node-server'
 import { auth } from "@/lib/auth"; // path to your auth file
 // import { web_serve } from "./web_serve.ts";
 import { add_media, get_media, del_media, add_watchlist, get_watchlist } from "./api";
 import { addMediaSchema, addWatchlistSchema } from "@/lib/validate";
+import { spawn } from "child_process";
+import path from "path";
+
+// Path to your Python script
+const scriptPath = path.resolve(__dirname, "recommendation_engine.py");
+
+spawn(
+    "python",
+    [scriptPath],
+).unref();
 
 type Variables = {
     session: typeof auth.$Infer.Session.session | null,
@@ -57,7 +68,7 @@ app.post("/api/watchlist", async (c) => {
     const data = await c.req.json();
     let parse = addWatchlistSchema.safeParse(data);
 
-    if (!parse.success){
+    if (!parse.success) {
         return c.json({ error: parse.error.message }, 400);
     }
 
@@ -75,7 +86,17 @@ app.get("/api/watchlist/:uuid", async (c) => {
     let results = await get_watchlist(user, c.req.param("uuid"))
     if (!results.public && results.user != user.id) {
         return c.status(401)
-    } return 
+    } return
+})
+
+app.post("/api/recommendations", async (c) => {
+    return proxy('http://localhost:5000',
+        {
+            method: "POST",
+            headers: c.req.header(),
+            body: JSON.stringify(await c.req.json())
+        }
+    );
 })
 
 app.post("/api/media", async (c) => {

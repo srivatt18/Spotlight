@@ -1,7 +1,7 @@
 // components/SearchBar.tsx
 import React, { useState } from 'react';
 import { View, TextInput, FlatList, Text, Pressable, StyleSheet} from 'react-native';
-import media from '../../imdb_movies.json'; 
+import media from '@/backend/imdb_movies.json'; 
 import { theme, text } from '../styles';
 
 type mediatitle = {

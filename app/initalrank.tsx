@@ -5,16 +5,16 @@ import { theme, text } from '../lib/styles';
 
 export default function InitialRank() {
   const [selected, setSelected] = useState<
-    { names: string; rating: number }[]
+    { name: string; rating: number }[]
   >([]);
 
-  const handleSelect = (movie: { names: string }) => {
+  function handleSelect(movie: { names: string }) {
     if (!selected.find(item => item.names === movie.names)) {
       setSelected(prev => [...prev, { names: movie.names, rating: 50 }]); // Default rating
     }
   };
 
-  const updateRating = (index: number, rating: string) => {
+  function updateRating(index: number, rating: string) {
     const copy = [...selected];
     copy[index].rating = parseInt(rating) || 0;
     setSelected(copy);
