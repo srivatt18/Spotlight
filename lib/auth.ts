@@ -12,11 +12,15 @@ export const auth = betterAuth({
     user: {
         additionalFields: {
             watchHistory: {
-                type: "string[]"
+                type: "string[]",
+                required: true,
+                defaultValue: "",
             },
             
             lang: {
-                type: "string"
+                type: "string",
+                required: true,
+                defaultValue: "en-US"
             }
         }
     },

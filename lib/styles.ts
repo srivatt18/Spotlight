@@ -62,7 +62,6 @@ export const theme = StyleSheet.create({
         flex: 1,
         flexGrow: 1,
         padding: scaleMin(15),
-        justifyContent: "center",
         alignItems: "center",
         backgroundColor: "#000",
         minHeight: "100%",

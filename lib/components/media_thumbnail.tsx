@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Image, View, StyleSheet, Text } from 'react-native';
-import Rectangle from '../../assets/images/Rectangle.png';
+import Rectangle from '@/assets/images/Rectangle.png';
 
 interface Props {
   size?: number;

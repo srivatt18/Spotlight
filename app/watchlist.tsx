@@ -15,9 +15,6 @@ const router = useRouter();
 export default function WatchlistPage() {
   return (
     <ScrollView style={{backgroundColor: "#000"}} contentContainerStyle={theme.container}>
-
-
-
       <View style={{ justifyContent: "center", alignItems: "center", marginTop: 40, gap: 20 }}>
         <Text style={[theme.text, text.lg]}>New Watchlist</Text>
 

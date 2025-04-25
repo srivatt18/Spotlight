@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import MediaTile from '@/lib/components/media_tile';
 import { useSession } from '@/lib/auth-client';
-import { theme, text, scale, scaleHoz, scaleVert } from '../lib/styles';
+import { theme, text, scale, scaleHoz, scaleVert } from '@/lib/styles';
 import { MediaType } from '@/lib/validate';
 import { useRouter } from 'expo-router';
 

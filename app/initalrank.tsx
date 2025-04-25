@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, FlatList, TextInput, TouchableOpacity} from 'react-native';
-import SearchBar from '../lib/components/search_bar';
-import { theme, text } from '../lib/styles';
+import SearchBar from '@/lib/components/search_bar';
+import { theme, text } from '@/lib/styles';
 import { MediaType } from '@/lib/validate';
 
 export default function InitialRank() {
