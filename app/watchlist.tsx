@@ -1,32 +1,75 @@
-import React from "react";
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
   StyleSheet,
-  TouchableOpacity, ScrollView, useWindowDimensions
-} from "react-native";
-
+  TouchableOpacity,
+} from 'react-native';
+import MediaTile from '@/lib/components/media_tile';
+import { theme, text, scaleVert, scaleMin, scale } from '@/lib/styles';
+import { MediaType } from '@/lib/validate';
+import SearchBar from '@/lib/components/search_bar';
+import { useSession } from '@/lib/auth-client';
 import { useRouter } from 'expo-router';
 
-import { theme, text } from '@/lib/styles';
+const router = useRouter()
 
-const router = useRouter();
+function CreateWatchlist() {
+  let session = useSession()
+  useEffect(() => {
+    if (!session) {
+      router.push('/auth/login')
+    }
+  }, [])
 
-export default function WatchlistPage() {
+  const [watchlist, setWatchlist] = useState<MediaType[]>([])
+  const [saved, setSaved] = useState(true);
+
+  function addToWatchlist(movie: MediaType) {
+    if (!watchlist.find(item => item.names === movie.names)) {
+      setWatchlist(prev => [...prev, movie]);
+      setSaved(false)
+    }
+  };
+
+  function saveWatchlist() {
+    // Save watchlist
+    setSaved(true)
+  }
+
   return (
-    <ScrollView style={{backgroundColor: "#000"}} contentContainerStyle={theme.container}>
-      <View style={{ justifyContent: "center", alignItems: "center", marginTop: 40, gap: 20 }}>
-        <Text style={[theme.text, text.lg]}>New Watchlist</Text>
+    <View style={theme.container}>
+      {/* Watchlist Name */}
+      <Text style={[text.xl, { marginBottom: 20 }]}>Add to your personal watchlist!</Text>
 
-        <TouchableOpacity onPress={() => router.push('/createwatchlist')}>
-          <Text style={theme.button}>Create</Text>
-        </TouchableOpacity>
+      <SearchBar onSelect={addToWatchlist} />
 
-        <Text style={[theme.text, text.lg]}>View/Edit Watchlist</Text>
-        <TouchableOpacity onPress={() => router.push('/auth/login')}>
-          <Text style={theme.button}>View</Text>
-        </TouchableOpacity>
+      {/* Movies in watchlist */}
+      <View style={styles.tileGrid}>
+        {watchlist.map((media, index) => (
+          <View key={index} style={{ flex: 1, flexDirection: "row", padding: scaleVert(4) }}>
+
+            <MediaTile title={media.names} size={scale(40)} />
+            <Text style={[text.text, { padding: scaleMin(4) }]}>{media.overview}</Text>
+
+          </View>
+        ))}
       </View>
-    </ScrollView>
+      <TouchableOpacity onPress={saveWatchlist} disabled={saved}>
+        <Text style={[theme.button, saved ? { backgroundColor: 'gray'} : null]}>Save changes</Text>
+      </TouchableOpacity>
+    </View>
   );
 };
+
+const styles = StyleSheet.create({
+  tileGrid: {
+    flexDirection: 'column',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    gap: 16,
+    width: '100%',
+  },
+});
+
+export default CreateWatchlist;
