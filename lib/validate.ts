@@ -1,8 +1,11 @@
 import { z } from 'zod';
 
+export type MediaType = z.infer<typeof mediaSchema>;
+
 export const mediaSchema = z.object({
     names: z.string(),
     date_x: z.string().nullable(),
+    score: z.number().nullable(),
     genre: z.string().nullable(),
     overview: z.string().nullable(),
     crew: z.string().nullable(),

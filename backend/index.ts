@@ -28,7 +28,7 @@ console.log(auth.options)
 
 // CORS
 app.use(
-    "/api/auth/**",
+    "*",
     cors({
         origin: (origin, _) => { // TODO: DO NOT LEAVE IN FINAL APP THIS IS VERY BAD
             return origin;
@@ -42,7 +42,7 @@ app.use(
     }),
 );
 
-app.use("/api/**", async (c, next) => {
+app.use("/api/*", async (c, next) => {
     console.log("auth middleware running!");
     const session = await auth.api.getSession({ headers: c.req.raw.headers });
 
@@ -57,7 +57,7 @@ app.use("/api/**", async (c, next) => {
     return next();
 });
 
-app.on(["POST", "GET"], "/api/auth/**", (c) => auth.handler(c.req.raw)); // Forward all auth requests to better-auth
+app.on(["POST", "GET"], "/api/auth/*", (c) => auth.handler(c.req.raw)); // Forward all auth requests to better-auth
 
 app.post("/api/watchlist", async (c) => {
     let user = c.get("user");

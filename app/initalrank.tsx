@@ -2,15 +2,14 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, FlatList, TextInput, TouchableOpacity} from 'react-native';
 import SearchBar from '../lib/components/search_bar';
 import { theme, text } from '../lib/styles';
+import { MediaType } from '@/lib/validate';
 
 export default function InitialRank() {
-  const [selected, setSelected] = useState<
-    { name: string; rating: number }[]
-  >([]);
+  const [selected, setSelected] = useState<{media: MediaType, rating: number}[]>([]);
 
-  function handleSelect(movie: { names: string }) {
-    if (!selected.find(item => item.names === movie.names)) {
-      setSelected(prev => [...prev, { names: movie.names, rating: 50 }]); // Default rating
+  function onSearchSelect(movie: MediaType) {
+    if (!selected.find(item => item.media.names === movie.names)) {
+      setSelected(prev => [...prev, { media: movie, rating: 50 }]); // Default rating
     }
   };
 
@@ -23,14 +22,14 @@ export default function InitialRank() {
   return (
     <View style={styles.container}>
       <Text style={[text.xl, {marginBottom: 20}]}>Please rate 5 Movies/Shows from 0-100, so we can find your next watch!</Text>
-      <SearchBar onSelect={handleSelect} />
+      <SearchBar onSelect={onSearchSelect} />
 
       <FlatList
         data={selected}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item, index }) => (
           <View style={styles.ratingItem}>
-            <Text style = {[text.md]}> {item.names}</Text>
+            <Text style = {[text.md]}> {item.media.names}</Text>
             <TextInput
               style={[theme.textInput, styles.input, {marginLeft: 10}]}
               keyboardType="numeric"

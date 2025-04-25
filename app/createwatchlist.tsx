@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -9,43 +9,34 @@ import {
   Dimensions,
   TouchableOpacity
 } from 'react-native';
-import { router } from "expo-router";
 import MediaTile from '../lib/components/media_tile';
 import PlusIcon from '../assets/images/plus.png';
 import SearchIcon from '../assets/images/search.png';
 import { theme, text } from '../lib/styles';
+import { MediaType } from '@/lib/validate';
+import SearchBar from '@/lib/components/search_bar';
 
 const screenWidth = Dimensions.get('window').width;
 const tileSize = screenWidth / 15;
 
 const CreateWatchlist = () => {
+  const [watchlist, setWatchlist] = useState<MediaType[]>([])
+
+  function addToWatchlist(movie: MediaType) {
+    if (!watchlist.find(item => item.names === movie.names)) {
+      setWatchlist(prev => [...prev, movie]); // Default rating
+    }
+  };
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.content}>
         {/* Watchlist Name */}
-        <Text style={[text.xl, { marginBottom: 20 }]}>Watchlist name:</Text>
-        <TextInput
-          placeholder="Enter name..."
-          placeholderTextColor="#aaa"
-          style={[theme.textInput, styles.nameInput]}
-        />
+        <Text style={[text.xl, { marginBottom: 20 }]}>Add to your personal watchlist!</Text>
 
-        {/* Additional Fields */}
-        <Text style={[text.md, { marginBottom: 8, marginTop: 10 }]}>Invite friends</Text>
-        <Text style={[text.md, { marginBottom: 16, marginTop: 10 }]}>Visibility</Text>
+        <SearchBar onSelect={addToWatchlist} />
 
-        {/* Search Bar */}
-        <View style={styles.searchBar}>
-          <Image source={SearchIcon} style={styles.searchIcon} />
-          <TextInput
-            placeholder="Search"
-            placeholderTextColor="#999"
-            style={styles.searchInput}
-          />
-        </View>
-
-        {/* Media Tiles */}
-        <MediaTile title="Despicable Me" size={tileSize} />
+{/* Add movies from watchlist */}
+        {/* Media Tiles
         <View style={styles.tileGrid}>
           {Array.from({ length: 6 }).map((_, index) => (
             <View key={index} style={styles.tileWrapper}>
@@ -54,7 +45,7 @@ const CreateWatchlist = () => {
               <Image source={PlusIcon} style={styles.plusIcon} />
             </View>
           ))}
-        </View>
+        </View> */}
       </ScrollView>
       <TouchableOpacity style={styles.floatingButton}>
         <Text style={styles.buttonText}>Submit</Text>
@@ -80,23 +71,8 @@ const styles = StyleSheet.create({
     width: '100%',
     marginBottom: 16,
   },
-  searchBar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderColor: '#CF4747',
-    borderWidth: 1,
-    borderRadius: 18,
-    paddingHorizontal: 12,
-    paddingVertical: 15,
-    marginBottom: 24,
-    marginTop: 18,
-    width: '100%',
-  },
-  searchIcon: {
-    width: 20,
-    height: 20,
-    marginRight: 8,
-  },
+  
+
   searchInput: {
     color: 'white',
     flex: 1,

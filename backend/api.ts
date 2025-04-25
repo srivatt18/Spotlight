@@ -34,7 +34,7 @@ export async function add_watchlist(user:  typeof auth.$Infer.Session.user, titl
     )
 }
 
-export async function get_watchlist(user: typeof auth.$Infer.Session.user, uuid: string) {
+export async function get_watchlist(user: typeof auth.$Infer.Session.user, uuid: string): Promise<any> {
     let results = db.prepare("SELECT * FROM watchlists WHERE uuid = ?").all(uuid);
     return results
 }

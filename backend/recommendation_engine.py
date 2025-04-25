@@ -1,6 +1,7 @@
 # Test with (windows)
 # curl -v http://localhost:5000/recommend -H "Content-Type: application/json" -d "{\"ratings\":[{\"movie\":\"Interstellar\",\"rating\":50},{\"movie\":\"Frozen II\",\"rating\":100}]}"
 
+import os
 import numpy as np
 import pandas as pd
 from flask import Flask, request, jsonify
@@ -11,10 +12,12 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import warnings
 warnings.filterwarnings("ignore")
+print(os.path.dirname(os.path.abspath(__file__)))
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 # Step 2: Load your CSV from Google Drive
-csv_path = "../assets/imdb_movies.json"  # Update path
-df = pd.read_json(csv_path).dropna(subset=['overview'])
+data_path = "../assets/movies.json"  # Update path
+df = pd.read_json(data_path).dropna(subset=['overview'])
 
 # Step 4: Compute TF-IDF matrix and cosine similarity
 tfidf = TfidfVectorizer(stop_words='english')
