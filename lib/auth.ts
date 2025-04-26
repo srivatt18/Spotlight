@@ -4,6 +4,7 @@ import Database from "better-sqlite3";
  
 export const auth = betterAuth({
     baseURL: "http://localhost:3000",
+    trustedOrigins: ["http://localhost:8081"],
     database: new Database("./sqlite.db"),
     emailAndPassword: {  
         enabled: true
@@ -11,10 +12,16 @@ export const auth = betterAuth({
     
     user: {
         additionalFields: {
-            watchHistory: {
-                type: "string[]",
+            watchList: {
+                type: "string", // JSON.stringify()'d watchlist
                 required: true,
-                defaultValue: "",
+                defaultValue: "[]",
+            },
+
+            watchedMovies: {
+                type: "string",
+                required: true,
+                defaultValue: "[]"
             },
             
             lang: {

@@ -4,26 +4,38 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
+  ScrollView,
 } from 'react-native';
 import MediaTile from '@/lib/components/media_tile';
 import { theme, text, scaleVert, scaleMin, scale } from '@/lib/styles';
-import { MediaType } from '@/lib/validate';
+import { MediaType, MovieHistoryType, watchedMoviesSchema, watchlistSchema } from '@/lib/validate';
 import SearchBar from '@/lib/components/search_bar';
-import { useSession } from '@/lib/auth-client';
+import { useSession, updateUser } from '@/lib/auth-client';
 import { useRouter } from 'expo-router';
 
 const router = useRouter()
 
-function CreateWatchlist() {
+function Watchlist() {
   let session = useSession()
-  useEffect(() => {
-    if (!session) {
-      router.push('/auth/login')
-    }
-  }, [])
 
   const [watchlist, setWatchlist] = useState<MediaType[]>([])
+  const [watchedMovies, setWatchedMovies] = useState<MovieHistoryType[]>([])
+
   const [saved, setSaved] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (!session.data) {
+        router.push('/auth/login')
+      }
+    }, 500)
+
+    if (session.data) {
+      console.log("watchlist: " + session.data.user.watchList)
+      setWatchlist(watchlistSchema.parse(JSON.parse(session.data.user.watchList)))
+      setWatchedMovies(watchedMoviesSchema.parse(JSON.parse(session.data.user.watchedMovies)))
+    }
+  }, [])
 
   function addToWatchlist(movie: MediaType) {
     if (!watchlist.find(item => item.names === movie.names)) {
@@ -32,13 +44,23 @@ function CreateWatchlist() {
     }
   };
 
+  function setWatched(title: string, rating: number, watched: boolean) {
+    if (session.data?.user.watchedMovies.includes(title) && !watched) {
+      setWatchedMovies(watchedMovies?.filter(movie => movie.title != title))
+    } else if (!session.data?.user.watchedMovies.includes(title) && watched) {
+      setWatchedMovies(watchedMovies.concat([{title, rating}]))
+    }
+  }
+
   function saveWatchlist() {
-    // Save watchlist
+    updateUser({
+      watchList: JSON.stringify(watchlist)
+    })
     setSaved(true)
   }
 
   return (
-    <View style={theme.container}>
+    <ScrollView style={{backgroundColor: "#000"}} contentContainerStyle={theme.container}>
       {/* Watchlist Name */}
       <Text style={[text.xl, { marginBottom: 20 }]}>Add to your personal watchlist!</Text>
 
@@ -56,9 +78,9 @@ function CreateWatchlist() {
         ))}
       </View>
       <TouchableOpacity onPress={saveWatchlist} disabled={saved}>
-        <Text style={[theme.button, saved ? { backgroundColor: 'gray'} : null]}>Save changes</Text>
+        <Text style={[theme.button, saved ? { backgroundColor: 'gray' } : null]}>Save changes</Text>
       </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -72,4 +94,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CreateWatchlist;
+export default Watchlist;

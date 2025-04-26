@@ -46,7 +46,7 @@ export default function RecommendationPage() {
     <ScrollView contentContainerStyle={[theme.container, { gap: scaleVert(10) }]}>
       {/* Movies*/}
       <View>
-        <Text style={[text.xl, { marginBottom: 20 }]}>Movies:</Text>
+        <Text style={[text.xl, { marginBottom: 20 }]}>Here's some great movies to watch!:</Text>
 
         <View style={styles.tileGrid}>
           {recommendations.recommendations.map((media, index) => {console.log("Creating component" + media); return (

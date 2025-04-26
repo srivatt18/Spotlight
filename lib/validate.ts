@@ -1,21 +1,30 @@
 import { z } from 'zod';
 
 export type MediaType = z.infer<typeof mediaSchema>;
+export type MovieHistoryType = z.infer<typeof movieHistorySchema>
 
 export const mediaSchema = z.object({
-    names: z.string(),
-    date_x: z.string().nullable(),
-    score: z.number().nullable(),
-    genre: z.string().nullable(),
-    overview: z.string().nullable(),
-    crew: z.string().nullable(),
-    orig_title: z.string().nullable(),
-    status: z.string().nullable(),
-    orig_lang: z.string().nullable(),
-    budget_x: z.number().nullable(),
-    revenue: z.number().nullable(),
-    country: z.string().nullable(),
+  names: z.string(),
+  date_x: z.string().nullable(),
+  score: z.number().nullable(),
+  genre: z.string().nullable(),
+  overview: z.string().nullable(),
+  crew: z.string().nullable(),
+  orig_title: z.string().nullable(),
+  status: z.string().nullable(),
+  orig_lang: z.string().nullable(),
+  budget_x: z.number().nullable(),
+  revenue: z.number().nullable(),
+  country: z.string().nullable(),
 });
+
+export const movieHistorySchema = z.object({
+  title: z.string(),
+  rating: z.number()
+})
+
+export const watchlistSchema = z.array(mediaSchema)
+export const watchedMoviesSchema = z.array(movieHistorySchema);
 
 export const jsonDbSchema = z.array(mediaSchema);
 
