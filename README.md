@@ -1,50 +1,21 @@
-# Welcome to your Expo app 👋
+# Welcome to Spotlight
+To get running, you must have a couple things
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Our recomendation algorithm runs on python
+You must have
+- python
+- numpy
+- pandas
+- sklearn-deap
 
-## Get started
+Our project is written in javascript/typescript
+You must run ```npm install``` in the root directory of this project to
+have the necessary dependencies.
 
-1. Install dependencies
+You can then run ```npx expo start``` to start up the development frontend.
+To view on a mobile device, download the expo app, and run ```npx expo start --tunnel``` and scan the QR code from the app
+We do not have a production build. You must use the development environment to view the app.
 
-   ```bash
-   npm install
-   ```
-
-2. Start the app
-
-   ```bash
-    npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+You must run ```npx ts-node backend/index.ts``` from the root of the project directory to run the backend. The recommendation
+api will automatically start from this backend, assuming that you run this command from root of the project directory, and python
+is available with the binary name ```python```

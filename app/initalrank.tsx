@@ -1,11 +1,24 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, FlatList, TextInput, TouchableOpacity} from 'react-native';
+import { View, Text, StyleSheet, FlatList, TextInput, TouchableOpacity } from 'react-native';
 import SearchBar from '@/lib/components/search_bar';
 import { theme, text } from '@/lib/styles';
 import { MediaType } from '@/lib/validate';
+import { updateUser } from '@/lib/auth-client';
+import { serializeWatchHistory } from '@/lib/convert';
 
 export default function InitialRank() {
-  const [selected, setSelected] = useState<{media: MediaType, rating: number}[]>([]);
+  const [selected, setSelected] = useState<{ media: MediaType, rating: number }[]>([]);
+
+  function submitRatings() {
+    let ratings = selected.map(item => ({
+      title: item.media.names,
+      rating: item.rating
+    }));
+
+    updateUser({
+      watchedMovies: serializeWatchHistory(ratings)
+    })
+  }
 
   function onSearchSelect(movie: MediaType) {
     if (!selected.find(item => item.media.names === movie.names)) {
@@ -21,7 +34,7 @@ export default function InitialRank() {
 
   return (
     <View style={styles.container}>
-      <Text style={[text.xl, {marginBottom: 20}]}>Please rate 5 Movies/Shows from 0-100, so we can find your next watch!</Text>
+      <Text style={[text.xl, { marginBottom: 20 }]}>Please rate 5 Movies/Shows from 0-100, so we can find your next watch!</Text>
       <SearchBar onSelect={onSearchSelect} />
 
       <FlatList
@@ -29,9 +42,9 @@ export default function InitialRank() {
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item, index }) => (
           <View style={styles.ratingItem}>
-            <Text style = {[text.md]}> {item.media.names}</Text>
+            <Text style={[text.md]}> {item.media.names}</Text>
             <TextInput
-              style={[theme.textInput, styles.input, {marginLeft: 10}]}
+              style={[theme.textInput, styles.input, { marginLeft: 10 }]}
               keyboardType="numeric"
               value={item.rating.toString()}
               onChangeText={(val) => updateRating(index, val)}
@@ -39,9 +52,13 @@ export default function InitialRank() {
           </View>
         )}
       />
-       <TouchableOpacity style={styles.floatingButton}>
-              <Text style={styles.buttonText}>Submit</Text>
-        </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.floatingButton}
+        disabled={selected.length < 5}
+        onPress={submitRatings}
+      >
+        <Text style={styles.buttonText}>Submit</Text>
+      </TouchableOpacity>
     </View>
   );
 }

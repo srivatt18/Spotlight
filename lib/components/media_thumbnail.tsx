@@ -22,7 +22,7 @@ async function searchMovie(title: string) {
   let movie = await fetch(url, options)
     .then(res => res.json())
   
-  return "https://image.tmdb.org/t/p/w500/" + movie.results[0].poster_path;
+  return "https://image.tmdb.org/t/p/w500/" + movie.results[0]?.poster_path;
 }
 
 function MediaThumbnail(props: Props) {

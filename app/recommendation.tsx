@@ -10,8 +10,8 @@ import {
 import MediaTile from '@/lib/components/media_tile';
 import { useSession } from '@/lib/auth-client';
 import { theme, text, scale, scaleHoz, scaleVert } from '@/lib/styles';
-import { MediaType } from '@/lib/validate';
 import { useRouter } from 'expo-router';
+import { deserializeWatchHistory } from '@/lib/convert';
 
 const router = useRouter()
 
@@ -21,25 +21,29 @@ export default function RecommendationPage() {
     length: 0,
   });
 
-  let session = useSession().data
+  let session = useSession()
   useEffect(() => {
     if (!session) {
       router.push('/auth/login')
     }
 
-    fetch("http://localhost:3000/api/recommendations", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ "ratings": [{ "movie": "Interstellar", "rating": 50 }, { "movie": "Frozen II", "rating": 100 }] })
-    })
-      .then((res) => res.json())
-      .then(data => {
-        console.log("data incoming")
-        console.log(data)
-        setRecommendations(data)
+    if (session.data) {
+      let history = deserializeWatchHistory(session.data.user.watchedMovies)
+      fetch("http://localhost:3000/api/recommendations", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ "ratings": history})
       })
+        .then((res) => res.json())
+        .then(data => {
+          console.log("data incoming")
+          console.log(data)
+          setRecommendations(data)
+        })
+    }
+
   }, [])
 
   return (
@@ -49,11 +53,13 @@ export default function RecommendationPage() {
         <Text style={[text.xl, { marginBottom: 20 }]}>Here's some great movies to watch!:</Text>
 
         <View style={styles.tileGrid}>
-          {recommendations.recommendations.map((media, index) => {console.log("Creating component" + media); return (
-            <View key={index}>
-              <MediaTile title={media} size={scaleHoz(35)} />
-            </View>
-          )})}
+          {recommendations.recommendations.map((media, index) => {
+            console.log("Creating component" + media); return (
+              <View key={index}>
+                <MediaTile title={media} size={scaleHoz(35)} />
+              </View>
+            )
+          })}
         </View>
       </View>
 

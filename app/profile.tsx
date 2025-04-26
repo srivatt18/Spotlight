@@ -1,9 +1,11 @@
 import { Pressable, Text, Image, View } from "react-native";
-import { useSession } from "@/lib/auth-client"
+import { useSession, signOut } from "@/lib/auth-client"
 import { theme } from "@/lib/styles";
+import { router } from "expo-router";
 
 export default function Profile() {
   let { data } = useSession();
+
   return (
     data != null ? (
       <View
@@ -14,7 +16,7 @@ export default function Profile() {
         <Text style={theme.text}>Email: {data.user.email}</Text>
         <Text style={theme.text}>Language: {data.user.lang}</Text>
 
-      <Pressable onPress={onsubmit}>
+      <Pressable onPress={() => {signOut(); router.push("/")}}>
               <Text style={theme.button}>Logout</Text>
             </Pressable>
       </View> 

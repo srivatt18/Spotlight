@@ -4,6 +4,7 @@ import { View, TextInput, Pressable, StyleSheet, Text } from 'react-native';
 import { signUp } from "@/lib/auth-client"
 import { scaleVert, theme } from '@/lib/styles';
 import { registerSchema } from '@/lib/validate';
+import { router } from 'expo-router';
 
 export default function Register() {
   const [username, setUsername] = useState('');
@@ -30,6 +31,11 @@ export default function Register() {
         password, // user password -> min 8 characters by default
       },
       {
+        onSuccess: (ctx) => {
+          console.log("register success")
+          router.push("/initalrank")
+        },
+
         onError: (ctx) => {
           // display the error message
           alert(ctx.error.message);
