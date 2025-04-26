@@ -17,6 +17,9 @@ export const auth = betterAuth({
             
             lang: {
                 type: "string"
+            },
+            watchList: {
+                type: "string[]"
             }
         }
     },
