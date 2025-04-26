@@ -1,6 +1,3 @@
-# Test with (windows)
-# curl -v http://localhost:5000/recommend -H "Content-Type: application/json" -d "{\"ratings\":[{\"movie\":\"Interstellar\",\"rating\":50},{\"movie\":\"Frozen II\",\"rating\":100}]}"
-
 import numpy as np
 import pandas as pd
 from flask import Flask, request, jsonify
@@ -74,13 +71,12 @@ app = Flask(__name__)
 CORS(app)
 
 # API route for recommendations
-@app.route('/', methods=['POST'])
+@app.route('/recommend', methods=['POST'])
 def get_recommendations():
-    print(request)
     data = request.get_json()
     user_ratings = data.get("ratings", {})
     ratings_map = {entry["movie"]: entry["rating"] for entry in user_ratings}
-    recommendations =  get_personalized_recommendations(ratings_map)
+    recommendations = get_personalized_recommendations(ratings_map)
     return jsonify({"recommendations": recommendations, "length": len(recommendations)})
 
 if __name__ == "__main__":
