@@ -3,7 +3,7 @@ import { admin } from "better-auth/plugins"
 import Database from "better-sqlite3";
  
 export const auth = betterAuth({
-    baseURL: "http://localhost:3000",
+    baseURL: process.env.EXPO_PUBLIC_BACKEND_URL,
     trustedOrigins: ["http://localhost:8081"],
     database: new Database("./sqlite.db"),
     emailAndPassword: {  

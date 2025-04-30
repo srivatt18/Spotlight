@@ -29,7 +29,7 @@ export default function RecommendationPage() {
 
     if (session.data) {
       let history = deserializeWatchHistory(session.data.user.watchedMovies)
-      fetch("http://localhost:3000/api/recommendations", {
+      fetch(`${process.env.EXPO_PUBLIC_BACKEND_URL}/api/recommendations`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -8,18 +8,10 @@ interface Props {
 }
 
 async function searchMovie(title: string) {
-  let endpoint = "https://api.themoviedb.org/3/search/movie?";
+  let endpoint = `${process.env.EXPO_PUBLIC_BACKEND_URL}/api/images/movie?`;
   let url = endpoint + new URLSearchParams({ query: title, include_adult: "false", language: "en-US", page: "1" }).toString()
 
-  const options = {
-    method: 'GET',
-    headers: {
-      accept: 'application/json',
-      Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJjOThjYTI5OTg1NWViZGFhZGNlNzNmYWU3M2NlYTllZiIsIm5iZiI6MTc0NTUxNTc2Mi4wOTc5OTk4LCJzdWIiOiI2ODBhNzRmMjhiY2VhNjZhODZhYWFjMTkiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.FNZ9jA9gvHBKZ4ouI8HgtvQ9MRnl5zWS14uEC8IAssg'
-    }
-  };
-
-  let movie = await fetch(url, options)
+  let movie = await fetch(url)
     .then(res => res.json())
   
   return "https://image.tmdb.org/t/p/w500/" + movie.results[0]?.poster_path;

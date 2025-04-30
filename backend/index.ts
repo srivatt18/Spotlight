@@ -4,6 +4,8 @@ import { proxy } from "hono/proxy"
 import { serve } from '@hono/node-server'
 import { auth } from "@/lib/auth";
 import { spawn } from "child_process";
+import 'dotenv/config'
+
 import path from "path";
 
 const scriptPath = path.resolve(__dirname, "recommendation_engine.py");
@@ -39,7 +41,8 @@ app.use(
 );
 
 app.use("/api/*", async (c, next) => {
-    console.log("auth middleware running!");
+    console.log("Auth middleware running!");
+
     const session = await auth.api.getSession({ headers: c.req.raw.headers });
 
     if (!session) {
@@ -65,4 +68,19 @@ app.post("/api/recommendations", async (c) => {
     );
 })
 
+app.get("/api/images/movie", async (c) => {
+    let search = new URL(c.req.url).search
+    const options = {
+        method: 'GET',
+        headers: {
+            accept: 'application/json',
+            Authorization: `Bearer ${process.env.TMDB_APIKEY}`
+        }
+    };
+    
+    return proxy("https://api.themoviedb.org/3/search/movie" + search, options)
+    
+})
+
+console.log(process.env)
 serve(app);
