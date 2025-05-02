@@ -1,90 +1,101 @@
-# Test with (windows)
-# curl -v http://localhost:5000/recommend -H "Content-Type: application/json" -d "{\"ratings\":[{\"movie\":\"Interstellar\",\"rating\":50},{\"movie\":\"Frozen II\",\"rating\":100}]}"
-
-import os
 import numpy as np
 import pandas as pd
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-
 import random
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import warnings
+
 warnings.filterwarnings("ignore")
-print(os.path.dirname(os.path.abspath(__file__)))
-os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
-# Step 2: Load your CSV from Google Drive
-data_path = "../assets/movies.json"  # Update path
-df = pd.read_json(data_path).dropna(subset=['overview'])
+# Step 2: Load your JSON from Google Drive
+csv_path = "../assets/movies.json"  # Update path if needed
 
-# Step 4: Compute TF-IDF matrix and cosine similarity
-tfidf = TfidfVectorizer(stop_words='english')
-tfidf_matrix = tfidf.fit_transform(df['overview'])
+# Load the JSON file
+try:
+    df = pd.read_json(csv_path)
+    print("Dataframe loaded successfully!")
+except ValueError as e:
+    print(f"Error loading JSON: {e}")
 
-cosine_sim = cosine_similarity(tfidf_matrix)
+# Check if 'overview' and 'names' columns exist
+if 'overview' not in df.columns or 'names' not in df.columns:
+    print("Error: 'overview' or 'names' column is missing in the dataset.")
+else:
+    # Drop rows where the 'overview' column is NaN
+    df = df.dropna(subset=['overview'])
 
-# Map movie titles to DataFrame indices
-indices = pd.Series(df.index, index=df['names']).drop_duplicates()
+    # Clean the text data (handle any escape sequences or unwanted characters)
+    df['overview'] = df['overview'].apply(lambda x: x.replace('\u00a0', ' ').replace('\u2014', '—'))
 
-def get_personalized_recommendations(user_ratings: dict, top_n=5):
-    user_indices = []
-    rating_weights = []
+    # Step 4: Compute TF-IDF matrix and cosine similarity
+    tfidf = TfidfVectorizer(stop_words='english')
+    tfidf_matrix = tfidf.fit_transform(df['overview'])
 
-    for movie, rating in user_ratings.items():
-        if movie in indices:
-            idx = indices[movie]
-            user_indices.append(idx)
-            rating_weights.append(rating / 100)  # Normalize rating out of 100
+    cosine_sim = cosine_similarity(tfidf_matrix)
 
-    if not user_indices:
-        return []
+    # Map movie titles to DataFrame indices
+    indices = pd.Series(df.index, index=df['names']).drop_duplicates()
 
-    # Normalize user ratings for weighted profile
-    rating_weights = np.array(rating_weights)
-    rating_weights = rating_weights / rating_weights.sum()
+    def get_personalized_recommendations(user_ratings: dict, top_n=5):
+        user_indices = []
+        rating_weights = []
 
-    # Create weighted user profile
-    user_profile = np.average(tfidf_matrix[user_indices].toarray(), axis=0, weights=rating_weights)
-    similarities = cosine_similarity([user_profile], tfidf_matrix).flatten()
+        for movie, rating in user_ratings.items():
+            if movie in indices:
+                idx = indices[movie]
+                user_indices.append(idx)
+                rating_weights.append(rating / 100)  # Normalize rating out of 100
 
-    # Exclude watched movies
-    for idx in user_indices:
-        similarities[idx] = -1
+        if not user_indices:
+            return []
 
-    # Sort and get top 30 similar movies
-    top_indices = similarities.argsort()[::-1]
-    top_30 = [i for i in top_indices if df['names'].iloc[i] not in user_ratings][:30]
+        # Normalize user ratings for weighted profile
+        rating_weights = np.array(rating_weights)
+        rating_weights = rating_weights / rating_weights.sum()
 
-    # Shuffle top results for regenerate behavior
-    random.shuffle(top_30)
+        similarities = cosine_similarity(user_profile, tfidf_matrix).flatten()
 
-    # Pick top_n unique recommendations
-    unique_recommendations = []
-    seen = set(user_ratings.keys())
+        # Exclude watched movies
+        for idx in user_indices:
+            similarities[idx] = -1
 
-    for idx in top_30:
-        title = df['names'].iloc[idx]
-        if title not in seen and title not in unique_recommendations:
-            unique_recommendations.append(title)
-        if len(unique_recommendations) >= top_n:
-            break
+        # Sort and get top 30 similar movies
+        top_indices = similarities.argsort()[::-1]
+        top_30 = [i for i in top_indices if df['names'].iloc[i] not in user_ratings][:30]
 
-    return unique_recommendations
+        # Shuffle top results for regenerate behavior
+        random.shuffle(top_30)
 
-app = Flask(__name__)
-CORS(app)
+        # Pick top_n unique recommendations
+        unique_recommendations = []
+        seen = set(user_ratings.keys())
 
-# API route for recommendations
-@app.route('/', methods=['POST'])
-def get_recommendations():
-    print(request)
-    data = request.get_json()
-    user_ratings = data.get("ratings", {})
-    ratings_map = {entry["movie"]: entry["rating"] for entry in user_ratings}
-    recommendations =  get_personalized_recommendations(ratings_map)
-    return jsonify({"recommendations": recommendations, "length": len(recommendations)})
+        for idx in top_30:
+            title = df['names'].iloc[idx]
+            if title not in seen and title not in unique_recommendations:
+                unique_recommendations.append(title)
+            if len(unique_recommendations) >= top_n:
+                break
 
-if __name__ == "__main__":
-    app.run(debug=False, port=5000)
+        return unique_recommendations
+
+    app = Flask(__name__)
+    CORS(app)
+
+    # API route for recommendations
+    @app.route('/recommendation', methods=['POST'])
+    def get_recommendations():
+        data = request.get_json()
+        ratings_list = data.get("ratings", [])  # List of objects: [{ "title": ..., "rating": ... }]
+        
+        # Convert to dict: { "title": rating, ... }
+        user_ratings = {entry["title"]: entry["rating"] for entry in ratings_list if "title" in entry and "rating" in entry}
+        
+        recommendations = get_personalized_recommendations(user_ratings)
+        return jsonify({"recommendations": recommendations, "length": len(recommendations)})
+
+
+    if __name__ == "__main__":
+        app.run(debug=False, port=5000)
