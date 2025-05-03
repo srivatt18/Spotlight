@@ -28,24 +28,26 @@ export default function RecommendationPage() {
     }
 
     if (session.data) {
-      let history = deserializeWatchHistory(session.data.user.watchedMovies)
-      fetch(`${process.env.EXPO_PUBLIC_BACKEND_URL}/api/recommendations`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ "ratings": history})
-      })
-        .then((res) => res.json())
-        .then(data => {
-          console.log("data incoming")
-          console.log(data)
-          setRecommendations(data)
-        })
+      getRecommendations()
     }
-
   }, [])
 
+  function getRecommendations() {
+    let history = deserializeWatchHistory(session.data?.user.watchedMovies)
+    fetch(`${process.env.EXPO_PUBLIC_BACKEND_URL}/api/recommendations`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ "ratings": history})
+    })
+      .then((res) => res.json())
+      .then(data => {
+        console.log("data incoming")
+        console.log(data)
+        setRecommendations(data)
+      })
+  }
   return (
     <ScrollView contentContainerStyle={[theme.container, { gap: scaleVert(10) }]}>
       {/* Movies*/}
@@ -54,7 +56,7 @@ export default function RecommendationPage() {
 
         <View style={styles.tileGrid}>
           {recommendations.recommendations.map((media, index) => {
-            console.log("Creating component" + media); return (
+            return (
               <View key={index}>
                 <MediaTile title={media} size={scaleHoz(35)} />
               </View>
@@ -63,7 +65,7 @@ export default function RecommendationPage() {
         </View>
       </View>
 
-      <TouchableOpacity>
+      <TouchableOpacity onPress={getRecommendations}>
         <Text style={theme.button}>Generate More Recommendations</Text>
       </TouchableOpacity>
     </ScrollView>

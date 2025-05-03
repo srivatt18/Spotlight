@@ -19,7 +19,7 @@ export default function WelcomeScreen() {
 
       <Text style={[theme.text, text.xxl]}>Welcome to Spotlight!</Text>
       <Text style={[theme.text, text.xl, text.light]}>
-        Our mission is to help you find shows and movies you will love!
+        Our mission is to help you find movies you will love!
       </Text>
 
       <View style={{ justifyContent: "center", alignItems: "center", marginTop: 40, gap: 20 }}>

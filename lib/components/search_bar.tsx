@@ -5,7 +5,7 @@ import media from '@/assets/movies';
 import SearchIcon from '@/assets/images/search.png';
 import { theme, text } from '@/lib/styles';
 import { MediaType } from '@/lib/validate';
-import MediaThumbnail from './media_thumbnail';
+import MediaThumbnail from '@/lib/components/media_thumbnail';
 
 type Props = {
   onSelect: (movie: MediaType) => void;
@@ -34,7 +34,7 @@ export default function SearchBar({ onSelect }: Props) {
       <View style={styles.searchBar}>
         <Image source={SearchIcon} style={styles.searchIcon} />
         <TextInput
-          placeholder="Search for a movie/show..."
+          placeholder="Search for a movie..."
           value={query}
           onChangeText={handleSearch}
           style={theme.text}

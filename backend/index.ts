@@ -82,5 +82,4 @@ app.get("/api/images/movie", async (c) => {
     
 })
 
-console.log(process.env)
 serve(app);

@@ -34,7 +34,7 @@ export default function InitialRank() {
 
   return (
     <View style={styles.container}>
-      <Text style={[text.xl, { marginBottom: 20 }]}>Please rate 5 Movies/Shows from 0-100, so we can find your next watch!</Text>
+      <Text style={[text.xl, { marginBottom: 20 }]}>Please rate 5 Movies from 0-100, so we can find your next watch!</Text>
       <SearchBar onSelect={onSearchSelect} />
 
       <FlatList
